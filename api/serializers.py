@@ -14,11 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
             validators=[UniqueValidator(queryset=UserModel.objects.all())]
             )
-    password = serializers.CharField(min_length=8)
+    password = serializers.CharField(min_length=8, write_only=True)
 
     def create(self, validated_data):
         user = UserModel.objects.create_user(
-            uswername=validated_data['username'],
+            username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'])
         return user
