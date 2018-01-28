@@ -10,9 +10,12 @@ UserModel = get_user_model()
 
 class AccountsTest(APITestCase):
     def setUp(self):
-        # We want to go ahead and originally create a user. 
+        # We want to go ahead and originally create a user.
         self.test_user = UserModel.objects.create_user(
-            'testuser', 'test@example.com', 'testpassword')
+            username='testuser',
+            email='test@example.com',
+            password='testpassword',
+            full_name='Test User')
 
     def test_create_user(self):
         """
@@ -20,6 +23,7 @@ class AccountsTest(APITestCase):
         """
         data = {
             'username': 'foobar',
+            'full_name': 'Foo Bar',
             'email': 'foobar@example.com',
             'password': 'somepassword'
         }
@@ -31,11 +35,12 @@ class AccountsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['username'], data['username'])
         self.assertEqual(response.data['email'], data['email'])
+        self.assertEqual(response.data['full_name'], data['full_name'])
         self.assertFalse('password' in response.data)
 
     def test_api_login(self):
         data = {
-            'username': 'testuser',
+            'username': 'test@example.com',
             'password': 'testpassword'
         }
 
