@@ -7,6 +7,7 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     username = models.CharField(_('username'), max_length=100)
     email = models.EmailField(_('email address'), unique=True)
     full_name = models.CharField(_('username'), max_length=255)
@@ -24,3 +25,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+
+class Submission(models.Model):
+
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    datafile = models.FileField(blank=False, null=False)
+    score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
